@@ -266,8 +266,9 @@ function About() {
           <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
             Seeking a software engineering / AI-ML internship to gain practical
             experience and contribute to real-world projects. I enjoy leading
-            small teams, shipping hackathon builds, and bridging ML models with
-            usable web and mobile frontends.
+            and collaboration, shipping hackathon builds, building cloud
+            projects, and bridging ML models with usable web and mobile
+            frontends.
           </p>
           <p className="mt-3 font-mono text-xs text-slate-500 dark:text-slate-500">
             $ status: open_to_internships --year 2
