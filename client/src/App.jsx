@@ -456,8 +456,7 @@ function Contact() {
             The fastest way to reach me is email.
           </h3>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-            Tell me about your internship, project idea, or hackathon — I reply
-            quick.
+            Tell me about your internship, project idea, or hackathon.
           </p>
           <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
             <a
