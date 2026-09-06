@@ -8,6 +8,7 @@
     "server": "node server.js",
     "build": "npm --prefix client install && npm --prefix client run build",
     "dev:client": "npm --prefix client run dev",
+    "lint": "npm --prefix client run lint",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
