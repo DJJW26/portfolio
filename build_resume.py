@@ -1,14 +1,17 @@
-"""Resume sync script: updates Divij Jhunjhunwala.docx and generates a matching PDF.
+"""Resume sync script: updates Divij Jhunjhunwala.docx (CloudSim entries, idempotent).
+
+NOTE: PDF export is owned by Divij now — export from Word yourself as
+Divij-Jhunjhunwala-Resume.pdf and copy it to client/public/. This script
+no longer writes that file (its PDF output goes to a -generated name).
 
 Usage:  python build_resume.py
-Outputs: Divij Jhunjhunwala.docx (updated), Divij-Jhunjhunwala-Resume.pdf
-The website serves the PDF from client/public/ (copy it there after running).
+Outputs: Divij Jhunjhunwala.docx (updated), Divij-Jhunjhunwala-Resume-generated.pdf
 """
 import docx
 from fpdf import FPDF
 
 DOCX_PATH = "Divij Jhunjhunwala.docx"
-PDF_PATH = "Divij-Jhunjhunwala-Resume.pdf"
+PDF_PATH = "Divij-Jhunjhunwala-Resume-generated.pdf"
 
 CLOUDSIM_TITLE = "Energy-Aware VM Placement (CloudSim)"
 CLOUDSIM_BULLETS = [
