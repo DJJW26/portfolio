@@ -405,34 +405,21 @@ function Projects() {
 }
 
 function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', message: '' })
-  const [status, setStatus] = useState({ type: '', text: '' })
-  const [sending, setSending] = useState(false)
+  const [copied, setCopied] = useState(false)
 
-  const submit = async (e) => {
-    e.preventDefault()
-    setSending(true)
-    setStatus({ type: '', text: '' })
-    // Try the Express backend first (works in local dev via Vite proxy).
-    // On GitHub Pages (static-only) there is no backend, so fall back to mailto.
+  const copyEmail = async () => {
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      })
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(data.error || 'Backend unavailable')
-      setStatus({ type: 'ok', text: 'Message sent! I\'ll get back to you soon.' })
-      setForm({ name: '', email: '', message: '' })
-    } catch (err) {
-      const subject = encodeURIComponent(`Portfolio contact from ${form.name}`)
-      const body = encodeURIComponent(`${form.message}\n\n— ${form.name} (${form.email})`)
-      window.location.href = `mailto:${LINKS.email}?subject=${subject}&body=${body}`
-      setStatus({ type: 'ok', text: 'No backend on this static host — opened your email app instead. Just hit send!' })
-    } finally {
-      setSending(false)
+      await navigator.clipboard.writeText(LINKS.email)
+    } catch {
+      const ta = document.createElement('textarea')
+      ta.value = LINKS.email
+      document.body.appendChild(ta)
+      ta.select()
+      document.execCommand('copy')
+      document.body.removeChild(ta)
     }
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   return (
@@ -440,7 +427,7 @@ function Contact() {
       <SectionHeading kicker="// contact" title="Get In Touch" desc="Internship opportunities, hackathons, or just to say hi — my inbox is open." />
       <div className="reveal grid gap-6 md:grid-cols-5">
         <div className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900 md:col-span-2">
-          <h3 className="font-semibold text-slate-900 dark:text-white">Contact info</h3>
+          <h3 className="font-semibold text-slate-900 dark:text-white">Find me here</h3>
           <div className="mt-4 space-y-3 text-sm">
             <a href={`mailto:${LINKS.email}`} className="block rounded-lg bg-slate-50 p-3 transition hover:bg-cyan-50 dark:bg-slate-800 dark:hover:bg-slate-700">
               <span className="font-mono text-xs text-slate-500">EMAIL</span>
@@ -463,65 +450,33 @@ function Contact() {
             ⬇ Download resume (.pdf)
           </a>
         </div>
-        <form
-          onSubmit={submit}
-          className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900 md:col-span-3"
-        >
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block text-sm">
-              <span className="mb-1 block font-medium text-slate-700 dark:text-slate-200">Name</span>
-              <input
-                required
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="Your name"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-cyan-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
-              />
-            </label>
-            <label className="block text-sm">
-              <span className="mb-1 block font-medium text-slate-700 dark:text-slate-200">Email</span>
-              <input
-                required
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                placeholder="you@example.com"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-cyan-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
-              />
-            </label>
-          </div>
-          <label className="mt-4 block text-sm">
-            <span className="mb-1 block font-medium text-slate-700 dark:text-slate-200">Message</span>
-            <textarea
-              required
-              rows={5}
-              value={form.message}
-              onChange={(e) => setForm({ ...form, message: e.target.value })}
-              placeholder="Hi Divij, we'd like to talk about..."
-              className="w-full resize-y rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-cyan-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
-            />
-          </label>
-          <button
-            disabled={sending}
-            className="mt-4 w-full rounded-lg bg-cyan-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-cyan-500 disabled:opacity-60 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
-          >
-            {sending ? 'Sending…' : 'Send Message'}
-          </button>
-          {status.text && (
-            <p
-              className={`mt-3 rounded-lg p-3 text-sm ${
-                status.type === 'ok'
-                  ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300'
-                  : 'bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-300'
-              }`}
-            >
-              {status.text}
-            </p>
-          )}
-          <p className="mt-3 font-mono text-xs text-slate-400">
-            Static build: form opens your email app · Express backend used in local dev
+        <div className="flex flex-col justify-center rounded-2xl border border-slate-200 bg-white p-6 text-center dark:border-slate-800 dark:bg-slate-900 sm:p-10 md:col-span-3">
+          <p className="font-mono text-sm text-cyan-600 dark:text-cyan-400">$ send a message</p>
+          <h3 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
+            The fastest way to reach me is email.
+          </h3>
+          <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            Tell me about your internship, project idea, or hackathon — I usually
+            reply within a day or two.
           </p>
-        </form>
+          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+            <a
+              href={`mailto:${LINKS.email}?subject=${encodeURIComponent("Hi Divij — let's talk")}`}
+              className="glow rounded-lg bg-cyan-600 px-8 py-3 text-sm font-semibold text-white transition hover:bg-cyan-500 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
+            >
+              ✉ Email Me
+            </a>
+            <button
+              onClick={copyEmail}
+              className="rounded-lg border border-slate-300 px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-200 dark:hover:border-cyan-400 dark:hover:text-cyan-300"
+            >
+              {copied ? '✓ Copied!' : '⧉ Copy Email'}
+            </button>
+          </div>
+          <p className="mt-5 font-mono text-xs text-slate-400 dark:text-slate-500">
+            {LINKS.email}
+          </p>
+        </div>
       </div>
     </section>
   )
