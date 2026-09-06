@@ -6,9 +6,9 @@ const LINKS = {
   github: 'https://github.com/DJJW26',
 }
 
-// Static resume file served from client/public (works on GitHub Pages).
+// Static resume PDF served from client/public (works on GitHub Pages).
 // Local Express dev still serves the same file via /api/resume.
-const RESUME_URL = `${import.meta.env.BASE_URL}Divij-Jhunjhunwala-Resume.docx`
+const RESUME_URL = `${import.meta.env.BASE_URL}Divij-Jhunjhunwala-Resume.pdf`
 
 const SKILLS = [
   {
@@ -42,6 +42,19 @@ const EXPERIENCE = [
 
 const PROJECTS = [
   {
+    title: 'Energy-Aware VM Placement (CloudSim)',
+    tag: 'Cloud · Java',
+    description:
+      'Implemented and compared energy-aware VM placement heuristics (Round-Robin vs PABFD vs MBFD) in CloudSim 3.0.3, reproducing Beloglazov et al. (2012).',
+    bullets: [
+      'Implemented the PABFD policy from scratch (minimum power-increase placement): 48.6% energy saved vs baseline with zero SLA violation',
+      'MBFD with static-threshold migration saved 57.7% at ~3% SLA violation — the paper’s energy-vs-SLA trade-off',
+    ],
+    stack: ['Java', 'CloudSim 3.0.3', 'Data Centers'],
+    link: 'https://github.com/DJJW26/CloudSim',
+    featured: true,
+  },
+  {
     title: 'Speech Evaluation Web Application',
     tag: 'AI / ML · Web',
     description:
@@ -51,6 +64,7 @@ const PROJECTS = [
       'Built backend services with Python + Flask and HuggingFace models',
     ],
     stack: ['Python', 'Flask', 'HuggingFace', 'ML'],
+    link: 'https://github.com/DJJW26',
   },
   {
     title: 'Parking Lot Application',
@@ -59,6 +73,7 @@ const PROJECTS = [
       'Parking lot interface to handle logistics.',
     bullets: ['Built with Flutter and Dart to manage parking logistics'],
     stack: ['Flutter', 'Dart'],
+    link: 'https://github.com/DJJW26',
   },
 ]
 
@@ -193,7 +208,7 @@ function Hero() {
               download
               className="rounded-lg border border-dashed border-slate-300 px-6 py-3 text-sm font-semibold text-slate-600 transition hover:border-cyan-500 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300"
             >
-              ⬇ Resume (.docx)
+              ⬇ Resume (.pdf)
             </a>
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-4 text-sm">
@@ -342,13 +357,13 @@ function Projects() {
         <SectionHeading
           kicker="// projects"
           title="Selected Projects"
-          desc="A couple of builds from my resume. Code lives on GitHub — reach out if you'd like a live demo."
+          desc="Builds from my resume. Code lives on GitHub — reach out if you'd like a live demo."
         />
         <div className="grid gap-6 md:grid-cols-2">
           {PROJECTS.map((p) => (
             <article
               key={p.title}
-              className="reveal flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900"
+              className={`reveal flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900${p.featured ? ' md:col-span-2' : ''}`}
             >
               <span className="w-fit rounded-full bg-slate-100 px-3 py-1 font-mono text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
                 {p.tag}
@@ -372,7 +387,7 @@ function Projects() {
               </div>
               <div className="mt-6 flex gap-3 pt-2">
                 <a
-                  href={LINKS.github}
+                  href={p.link || LINKS.github}
                   target="_blank"
                   rel="noreferrer"
                   className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
@@ -444,7 +459,7 @@ function Contact() {
             download
             className="mt-4 block rounded-lg border border-dashed border-slate-300 p-3 text-center text-sm font-semibold text-slate-600 transition hover:border-cyan-500 hover:text-cyan-600 dark:border-slate-700 dark:text-slate-300"
           >
-            ⬇ Download resume (.docx)
+            ⬇ Download resume (.pdf)
           </a>
         </div>
         <form
